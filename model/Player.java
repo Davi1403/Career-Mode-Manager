@@ -1,12 +1,14 @@
+package model;
+
 public class Player {
     String name;
-    double value;
+    int value;
     int overall;
 
-    public Player(String name, double value, int overall) {
-        String this.name = name;
-        double this.value = value;
-        int this.overall = overall;
+    public Player(String name, int overall, int value) {
+        this.name = name;
+        this.overall = overall;
+        this.value = value;
     }
 
     // GETS
