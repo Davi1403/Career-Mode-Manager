@@ -8,7 +8,7 @@ import java.util.List;
 public class BackpackService {
 
     public List<Player> team = new ArrayList<>();
-    while (team.size()) <= 11){
+    //while (team.size()) <= 11){
 
-    }
+    //}
 }

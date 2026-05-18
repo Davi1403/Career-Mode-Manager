@@ -14,9 +14,11 @@ public class ReadCSV {
         String line;
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String linha = br.readLine(); // pula a primeira linha
             while ((line = br.readLine()) != null){
                 String[] data = line.split(",");
-                players.add(new Player(data[0],Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+                players.add(new Player(data[1], data[11], Double.parseDouble(data[10]), Integer.parseInt(data[8])));
+                //players.add(new Player(data[0],Integer.parseInt(data[1]), Integer.parseInt(data[2])));
             }
         }catch (IOException e){
             e.printStackTrace();
