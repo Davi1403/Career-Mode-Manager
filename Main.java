@@ -14,16 +14,18 @@ public class Main {
         int[] formation = {1, 4, 4, 2};
         int budget = 100;
 
-        bs.genFirstSolution(players, formation, budget);
-        
-        for (Player player:players){
-            if(player.isFlag()){
-                System.out.print(player.getName());
-                System.out.print(" / " + player.getPos());
-                System.out.print(" / " + player.getValue());
-                System.out.print(" / " + player.getOverall());
-                System.out.println();
-            }
+        List<Player> fistSolution = bs.genFirstSolution(players, formation, budget);
+
+        for (Player player:fistSolution){
+            System.out.print(player.getName());
+            System.out.print(" / " + player.getPos());
+            System.out.print(" / " + player.getValue());
+            System.out.print(" / " + player.getOverall());
+            System.out.println();
         }
+
+        int evaluate = bs.evaluate(fistSolution, formation, budget);
+        System.out.println(evaluate);
+
     }
 }
