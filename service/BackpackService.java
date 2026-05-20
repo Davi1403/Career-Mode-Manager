@@ -4,9 +4,11 @@ import model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class BackpackService {
+    Random rand = new Random();
 
     public int getIndexPosition(String pos){
         switch (pos) {
@@ -18,39 +20,44 @@ public class BackpackService {
         }
     }
 
+    public Player draft(Map<String, List<Player>> players, String pos){
+        int sortedIndex = rand.nextInt(players.get(pos).size());
+        return players.get(pos).get(sortedIndex);
+    }
+
+
     // GENERATE FIRST SOLUTION
-    Random rand = new Random();
-    public List<Player> genFirstSolution(List<Player> players, int[] formation, int budget){
-        
-        int value = 0;
-        int draftedPlayers = 0;
-        int i=0;
+    public List<Player> genFirstSolution(Map<String, List<Player>> players, int[] formation, int budget, String[] keys){
         List<Player> team = new ArrayList<>();
-        
-        while (draftedPlayers < 11){
-            int sortedIndex = rand.nextInt(players.size());
-            Player sortedPlayer = players.get(sortedIndex);
-            
-            if (!team.contains(sortedPlayer)){
-                if(value + sortedPlayer.getValue() <= budget){
-                    int index = getIndexPosition(sortedPlayer.getPos());
-                    if(formation[index] != 0){
-                        team.add(sortedPlayer);
-                        formation[index]--;
-                        draftedPlayers++;
+        double value = 0;
+        int attempts = 0;
+
+        // DRAFT PLAYERS
+        for(int i = 0; i < formation.length; i++) {
+            int j=0;
+            while (j < formation[i]) {
+
+                Player draftedPlayer = draft(players, keys[i]);
+                if(!draftedPlayer.isFlag()){
+                    double aux = value + draftedPlayer.getValue();
+                    if (aux <= budget) {
+                        draftedPlayer.setFlag(true);
+                        team.add(draftedPlayer);
+                        value = aux;
+                        j++;
+                        attempts = 0;
                     }
                 }
+
+                attempts++;
+                if(attempts>4000){
+                    System.out.println("ERROR ON GENFIRSTSOLUTION");
+                    return team;
+                }
             }
-            i++;
-            if(i>10000) return new ArrayList<>();
         }
         return team;
     }
-
-    //public List<Player> team = new ArrayList<>();
-    //while (team.size()) <= 11){
-
-    //}
 
     // EVALUATE THE OVERALL
     public int evaluate(List<Player> team, int[] formation, int budget){
