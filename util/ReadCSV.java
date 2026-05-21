@@ -20,8 +20,8 @@ public class ReadCSV {
                 List<Player> aux = new ArrayList<>();
                 while ((line = br.readLine()) != null){
                     String[] data = line.split(",");
-                    aux.add(new Player(data[1], data[11], Double.parseDouble(data[10]), Integer.parseInt(data[8])));
-                    //players.add(new Player(data[0],Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+                    aux.add(new Player(data[1], data[11], Double.parseDouble(data[10]), Integer.parseInt(data[8]),
+                            data[6], data[7]));
                 }
                 players.put(keys[i], aux);
             }

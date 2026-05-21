@@ -2,6 +2,7 @@ import model.Player;
 import util.ReadCSV;
 import service.BackpackService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +12,18 @@ public class Main {
         ReadCSV reader = new ReadCSV();
         BackpackService bs = new BackpackService();
 
-        String[] files = {"GK.csv", "DEF.csv", "MID.csv", "ATK.csv"};
-        String[] keys = {"GK", "DEF", "MID", "ATK"};
-
+        // GEN ARRAYS
+        String[] files = { "GK.csv", "DEF.csv", "MID.csv", "ATK.csv" };
+        String[] keys = { "GK", "DEF", "MID", "ATK" };
         Map<String, List<Player>> players = reader.readFiles(files, keys);
-        int[] formation = {1,4, 4, 2};
-        int budget = 100;
 
+        // TEAM CONFIG
+        int budget = 100;
+                    // GK, DEF, MID, ATK
+        int[] formation = { 1, 4, 4, 2};
+        double[] pWeights = { 1.0, 1.0, 1.0, 1.0 };
+
+        Map<String, Double> posWeights = bs.genPosWeights(keys, pWeights);
         List<Player> fistSolution = bs.genFirstSolution(players, formation, budget, keys);
 
         for (Player player:fistSolution){
@@ -28,9 +34,9 @@ public class Main {
             System.out.println();
         }
 
-        int evaluate = bs.evaluate(fistSolution, formation, budget);
-        System.out.println(evaluate);
-        System.out.println(evaluate/11);
+        double[] teamInfo = bs.evaluate(fistSolution, posWeights);
+        System.out.println("team overall:"+teamInfo[0]+"\nteam value:"+ teamInfo[1]);
+        //System.out.println(evaluate/11);
 
     }
 }

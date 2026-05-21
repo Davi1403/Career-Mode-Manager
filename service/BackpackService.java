@@ -2,10 +2,7 @@ package service;
 
 import model.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class BackpackService {
     Random rand = new Random();
@@ -20,9 +17,68 @@ public class BackpackService {
         }
     }
 
+
     public Player draft(Map<String, List<Player>> players, String pos){
         int sortedIndex = rand.nextInt(players.get(pos).size());
         return players.get(pos).get(sortedIndex);
+    }
+
+
+    public Map<String, Double> genPosWeights(String[] keys, double[] pWeights){
+        if (keys.length != pWeights.length) {
+            throw new IllegalArgumentException("Erro: A quantidade de chaves e pesos deve ser idêntica!");
+        }
+
+        Map<String,Double> posWeights = new HashMap<>();
+        for(int i = 0; i < keys.length; i++) {
+            posWeights.put(keys[i], pWeights[i]);
+        }
+
+        return posWeights;
+    }
+
+
+    // EVALUATE THE OVERALL
+    public double[] evaluate(List<Player> team, Map<String, Double> posWeights){
+
+        int minOverall = 999;
+        int maxOverall = -1;
+        double baseOverall = 0;
+        double teamWorkBonus = 0;
+        double totalValue = 0;
+        Map<String, Integer> nationCount = new HashMap<>();
+        Map<String, Integer> clubCount = new HashMap<>();
+
+        for (Player player:team){
+
+            // GET MIN AND MAX OVERALL
+            if(player.getOverall() > maxOverall) maxOverall = player.getOverall();
+            if(player.getOverall() < minOverall) minOverall = player.getOverall();
+
+            // COUNT NATIONALITY AND CLUB
+            nationCount.put(player.getNat(), nationCount.getOrDefault(player.getNat(),0) + 1);
+            clubCount.put(player.getClub(), clubCount.getOrDefault(player.getClub(),0) + 1);
+
+            // APPLY POSITION WEIGHT
+            double playerOverall = player.getOverall() * posWeights.get(player.getPos());
+
+            // SUM OVERALL AND VALUE
+            baseOverall += playerOverall;
+            totalValue += player.getValue();
+        }
+
+        // NATIONALITY BONUS COUNT
+        for(int i : nationCount.values()){
+            if(i > 1) teamWorkBonus += (i-1) * 2;
+        }
+
+        // CLUB BONUS COUNT
+        for(int i : clubCount.values()){
+            if(i > 1) teamWorkBonus += (i-1) * 3;
+        }
+
+        // APPLIES BONUS AND PENALTIES, RETURN TOTALOVERALL AND TOTALVALUE
+        return new double[] {(baseOverall + teamWorkBonus) - (maxOverall - minOverall), totalValue};
     }
 
 
@@ -58,39 +114,5 @@ public class BackpackService {
         }
         return team;
     }
-
-    // EVALUATE THE OVERALL
-    public int evaluate(List<Player> team, int[] formation, int budget){
-        int totalOverall = 0;
-        double totalValue = 0;
-
-        if (team.size() != 11){
-            System.out.println("INCOMPLETE TEAM");
-            return 0;
-        }
-
-
-        for (Player player:team){
-
-            //CHECK THE FORMATION
-            int indexPosition = getIndexPosition(player.getPos());
-            if (formation[indexPosition] == 0){
-                System.out.println("WRONG FORMATION");
-                return 0;
-            }
-            formation[indexPosition] --;
-
-            // SUM OVERALL WITH BUDGET LIMIT
-            totalOverall += player.getOverall();
-            totalValue += player.getValue();
-
-            if (totalValue > budget) {
-                System.out.println("BLEW THE BUDGET");
-                return 0;
-            }
-        }
-        return totalOverall;
-    }
-
 
 }
