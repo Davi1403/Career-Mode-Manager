@@ -2,7 +2,6 @@ import model.Player;
 import util.Algorithms;
 import util.ReadCSV;
 import service.BackpackService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
