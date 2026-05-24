@@ -1,12 +1,11 @@
 import model.Player;
 import util.Algorithms;
+import service.GeneticService;
 import util.ReadCSV;
 import service.BackpackService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-
 
 public class Main {
 
@@ -71,5 +70,20 @@ public class Main {
         teamInfo = bs.evaluate(team, posWeights);
         printTeamTable(team,"TIME OTIMIZADO");
         System.out.println("OVERALL: "+teamInfo[0]/11+"\tCUSTO($): "+ teamInfo[1]);
+        System.out.println();
+        System.out.println("--GENETIC ALGORITHM--");
+        System.out.println();
+
+        GeneticService gn = new GeneticService(players, formation, budget, keys);
+
+        int populationSize = 20; // TP
+        List<List<Player>> fistPopulation = gn.firstPopulation(populationSize);
+        for (List<Player> team : fistPopulation){
+            for (Player p : team){
+                System.out.println(p.getName());
+            }
+            System.out.println("______________________________________");
+        }
+
     }
 }
