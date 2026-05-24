@@ -1,4 +1,5 @@
 import model.Player;
+import service.GeneticService;
 import util.ReadCSV;
 import service.BackpackService;
 
@@ -37,6 +38,21 @@ public class Main {
         double[] teamInfo = bs.evaluate(fistSolution, posWeights);
         System.out.println("team overall:"+teamInfo[0]+"\nteam value:"+ teamInfo[1]);
         //System.out.println(evaluate/11);
+
+        System.out.println();
+        System.out.println("--GENETIC ALGORITHM--");
+        System.out.println();
+
+        GeneticService gn = new GeneticService(players, formation, budget, keys);
+
+        int populationSize = 20; // TP
+        List<List<Player>> fistPopulation = gn.firstPopulation(populationSize);
+        for (List<Player> team : fistPopulation){
+            for (Player p : team){
+                System.out.println(p.getName());
+            }
+            System.out.println("______________________________________");
+        }
 
     }
 }
