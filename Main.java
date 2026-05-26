@@ -43,7 +43,7 @@ public class Main {
         System.out.println("--GENETIC ALGORITHM--");
         System.out.println();
 
-        GeneticService gn = new GeneticService(players, formation, budget, keys);
+        GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
 
         int populationSize = 20; // TP
         List<List<Player>> fistPopulation = gn.firstPopulation(populationSize);

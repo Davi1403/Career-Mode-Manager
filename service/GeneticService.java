@@ -11,14 +11,16 @@ public class GeneticService {
     private final int[] formation;
     private final int budget;
     private final String[] keys;
+    private final Map<String, Double> posWeights;
 
     private final BackpackService backpack = new BackpackService();
 
-    public GeneticService(Map<String, List<Player>> players, int[] formation, int budget, String[] keys){
+    public GeneticService(Map<String, List<Player>> players, int[] formation, int budget, String[] keys, Map<String, Double> posWeights){
         this.players = players;
         this. formation = formation;
         this.budget = budget;
         this.keys = keys;
+        this.posWeights = posWeights;
     }
 
     // INICIACAO RANDOMICA UNIFORME
@@ -30,5 +32,10 @@ public class GeneticService {
         return population;
     }
 
-    
+    public double fitness(List<Player> team){
+        double[] results = backpack.evaluate(team, posWeights);
+
+        if (results[1]> budget) return 1;
+        return  results[0];
+    }
 }
