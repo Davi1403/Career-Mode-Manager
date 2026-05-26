@@ -26,7 +26,7 @@ public class Player {
     public double getValue(){ return value; }
     public int getOverall(){ return overall; }
     public String getNat() { return nationality; }
-    public String getClub() { return nationality; }
+    public String getClub() { return club; }
 
     // SETS
     public void setFlag(boolean flag){
