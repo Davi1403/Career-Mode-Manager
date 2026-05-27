@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Main {
 
-    public static void main() {
+    public static void main(String[] args) {
 
         ReadCSV reader = new ReadCSV();
         BackpackService bs = new BackpackService();
@@ -52,8 +52,11 @@ public class Main {
         double[] resultSA = bs.evaluate(teamSA, posWeights);
         PrintTable.team(teamSA, resultSA, "ANNEALING SOLUTION");
 
-        //System.out.println("\n--GENETIC ALGORITHM--\n");
-        //GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
-        //gn.genetic();
+        /*
+        System.out.println("\n--GENETIC ALGORITHM--\n");
+        GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
+        gn.genetic();
+        */
+        
     }
 }

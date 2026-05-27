@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import util.PrintTable;
+
+import static util.PrintTable.team;
+
 public class GeneticService {
     private final Map<String, List<Player>> players;
     private final int[] formation;
@@ -46,10 +49,7 @@ public class GeneticService {
         }
         return fits;
     }
-<<<<<<< HEAD
-    /*
-    public List<Player> tournament(double[] fits){
-=======
+
 
     public List<Player> tournament(double[] fits, List<List<Player>> population){
         int tp = population.size();
@@ -59,24 +59,28 @@ public class GeneticService {
         int team2 = random.nextInt(tp);
         if (fits[team1] > fits[team2]) return population.get(team1);
         else return population.get(team2);
->>>>>>> 7824990 (feat: tournament)
-
-    }*/
+    }
 
     public void genetic(){
         List<List<Player>> fistPopulation = firstPopulation(populationSize);
         double[] fits = fitness(fistPopulation);
-        PrintTable p = new PrintTable();
-        p.printTeamTable(fistPopulation.get(0), "Team 1");
+
+
         double[] results = backpack.evaluate(fistPopulation.get(0), posWeights);
-        System.out.println(results[0]);
-        p.printTeamTable(fistPopulation.get(1), "Team 2");
+        team(fistPopulation.get(0), results, "Team 1");
+
         results = backpack.evaluate(fistPopulation.get(1), posWeights);
-        System.out.println(results[0]);
+        team(fistPopulation.get(1), results, "Team 2");
+
+
 
         List<Player> team = tournament(fits, fistPopulation);
-        p.printTeamTable(team, "TIME VENCEDOR");
+        results = backpack.evaluate(team, posWeights);
+
+        team(team, results, "Vencedor");
     }
 }
+
+
 
 
