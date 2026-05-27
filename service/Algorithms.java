@@ -26,11 +26,16 @@ public class Algorithms {
             Player newPlayer;
             int newPlayerIndex;
             double auxValue = currentValue - oldPlayer.getValue();
+            int safeBreak = 0;
             do {
                 newPlayerIndex = rand.nextInt(players.get(pos).size());
                 newPlayer = players.get(pos).get(newPlayerIndex);
                 auxValue += newPlayer.getValue();
+
+                safeBreak++;
+                if(safeBreak >= 100) break;
             } while (auxTeam.contains(newPlayer) || auxValue > budget);
+            if (safeBreak >= 100) continue;
 
             // TRADE PLAYERS FOR EVALUATE
             auxTeam.set(oldPlayerIndex, newPlayer);

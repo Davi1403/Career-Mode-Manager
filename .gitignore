@@ -1,1 +1,6 @@
-/out/
+*.class
+out/
+bin/
+.DS_Store
+Thumbs.db
+.idea

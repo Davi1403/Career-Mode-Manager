@@ -94,17 +94,15 @@ public class BackpackService {
             while (j < formation[i]) {
 
                 Player draftedPlayer = draft(players, keys[i]);
-                if(!draftedPlayer.isFlag()){
+                if(!team.contains(draftedPlayer)){
                     double aux = value + draftedPlayer.getValue();
                     if (aux <= budget) {
-                        draftedPlayer.setFlag(true);
                         team.add(draftedPlayer);
                         value = aux;
                         j++;
                         attempts = 0;
                     }
                 }
-
                 attempts++;
                 if(attempts>4000){
                     System.out.println("ERROR ON GENFIRSTSOLUTION");

@@ -22,10 +22,9 @@ public class Main {
         Map<String, List<Player>> players = reader.readFiles(files, keys);
 
         // TEAM CONFIG
-        int budget = 100;
-        // GK, DEF, MID, ATK
-        int[] formation = { 1, 4, 4, 2};
-        double[] pWeights = { 1.0, 1.0, 1.0, 1.0 };
+        int budget = 200;
+        int[] formation = { 1, 4, 4, 2}; // GK, DEF, MID, ATK
+        double[] pWeights = { 1.0, 1.0, 1.0, 1.0 }; // GK, DEF, MID, ATK
 
         // GEN POS WEIGHTS
         Map<String, Double> posWeights = bs.genPosWeights(keys, pWeights);
@@ -35,19 +34,26 @@ public class Main {
         double[] teamInfo = bs.evaluate(team, posWeights);
 
         // TESTS
-        {
-            PrintTable.team(team, teamInfo, "FIRST SOLUTION");
+        PrintTable.team(team, teamInfo, "FIRST SOLUTION");
 
-            // METHODS
-            //List<Player> newTeam = al.hillClimbing(players, posWeights, team, teamInfo, budget, 11);
-            //List<Player> newTeam = al.hillClimbingT(players, posWeights, team, teamInfo, budget, 11, 6);
-            List<Player> newTeam = (al.simulatedAnnealing(team, teamInfo, players, posWeights, budget, 100, 0.01, 0.999));
+        // METHODS
+        double[] infoHC = {teamInfo[0], teamInfo[1]};
+        List<Player> teamHC = al.hillClimbing(players, posWeights, team, infoHC, budget, 11);
+        double[] resultHC = bs.evaluate(teamHC, posWeights);
+        PrintTable.team(teamHC, resultHC, "HILL C SOLUTION");
 
-            double[] newTeamInfo = bs.evaluate(newTeam, posWeights);
-            PrintTable.team(newTeam, newTeamInfo, "BEST SOLUTION");
-        }
+        double[] infoHCT = {teamInfo[0], teamInfo[1]};
+        List<Player> teamHCT = al.hillClimbingT(players, posWeights, team, infoHCT, budget, 11, 6);
+        double[] resultHCT = bs.evaluate(teamHCT, posWeights);
+        PrintTable.team(teamHCT, resultHCT, "HILL CT SOLUTION");
 
+        double[] infoSA = {teamInfo[0], teamInfo[1]};
+        List<Player> teamSA = al.simulatedAnnealing(team, infoSA, players, posWeights, budget, 100, 0.01, 0.99);
+        double[] resultSA = bs.evaluate(teamSA, posWeights);
+        PrintTable.team(teamSA, resultSA, "ANNEALING SOLUTION");
 
-
+        //System.out.println("\n--GENETIC ALGORITHM--\n");
+        //GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
+        //gn.genetic();
     }
 }
