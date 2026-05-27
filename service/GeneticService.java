@@ -5,14 +5,15 @@ import model.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Random;
+import util.PrintTable;
 public class GeneticService {
     private final Map<String, List<Player>> players;
     private final int[] formation;
     private final int budget;
     private final String[] keys;
     private final Map<String, Double> posWeights;
-    private final int populationSize = 50; // TP
+    private final int populationSize = 2; // TP
 
 
     private final BackpackService backpack = new BackpackService();
@@ -45,16 +46,36 @@ public class GeneticService {
         }
         return fits;
     }
+<<<<<<< HEAD
     /*
     public List<Player> tournament(double[] fits){
+=======
+
+    public List<Player> tournament(double[] fits, List<List<Player>> population){
+        int tp = population.size();
+
+        Random random = new Random();
+        int team1 = random.nextInt(tp);
+        int team2 = random.nextInt(tp);
+        if (fits[team1] > fits[team2]) return population.get(team1);
+        else return population.get(team2);
+>>>>>>> 7824990 (feat: tournament)
 
     }*/
 
     public void genetic(){
         List<List<Player>> fistPopulation = firstPopulation(populationSize);
         double[] fits = fitness(fistPopulation);
+        PrintTable p = new PrintTable();
+        p.printTeamTable(fistPopulation.get(0), "Team 1");
+        double[] results = backpack.evaluate(fistPopulation.get(0), posWeights);
+        System.out.println(results[0]);
+        p.printTeamTable(fistPopulation.get(1), "Team 2");
+        results = backpack.evaluate(fistPopulation.get(1), posWeights);
+        System.out.println(results[0]);
 
-        for (double fit : fits) System.out.println(fit);
+        List<Player> team = tournament(fits, fistPopulation);
+        p.printTeamTable(team, "TIME VENCEDOR");
     }
 }
 
