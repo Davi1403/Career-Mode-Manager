@@ -22,6 +22,6 @@ public class Player {
     public String getPos(){ return pos; }
     public double getValue(){ return value; }
     public int getOverall(){ return overall; }
-    public String getNat() { return nationality; }
+    public String getNacionalidade() { return nationality; }
     public String getClub() { return club; }
     }

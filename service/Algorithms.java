@@ -33,9 +33,9 @@ public class Algorithms {
                 auxValue += newPlayer.getValue();
 
                 safeBreak++;
-                if(safeBreak >= 100) break;
+                if(safeBreak >= 1000) break;
             } while (auxTeam.contains(newPlayer) || auxValue > budget);
-            if (safeBreak >= 100) continue;
+            if (safeBreak >= 1000) continue;
 
             // TRADE PLAYERS FOR EVALUATE
             auxTeam.set(oldPlayerIndex, newPlayer);

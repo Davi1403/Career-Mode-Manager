@@ -29,7 +29,7 @@ public class PrintTable {
                             player.getPos(),
                             player.getOverall(),
                             valorFormatado,
-                            player.getNat(),
+                            player.getNacionalidade(),
                             player.getClub());
                 }
             }

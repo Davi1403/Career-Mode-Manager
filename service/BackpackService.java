@@ -56,7 +56,7 @@ public class BackpackService {
             if(player.getOverall() < minOverall) minOverall = player.getOverall();
 
             // COUNT NATIONALITY AND CLUB
-            nationCount.put(player.getNat(), nationCount.getOrDefault(player.getNat(),0) + 1);
+            nationCount.put(player.getNacionalidade(), nationCount.getOrDefault(player.getNacionalidade(),0) + 1);
             clubCount.put(player.getClub(), clubCount.getOrDefault(player.getClub(),0) + 1);
 
             // APPLY POSITION WEIGHT
@@ -83,7 +83,7 @@ public class BackpackService {
 
 
     // GENERATE FIRST SOLUTION
-    public List<Player> genFirstSolution(Map<String, List<Player>> players, int[] formation, int budget, String[] keys){
+    public List<Player> genFirstSolution(Map<String, List<Player>> players, int[] formation, double budget, String[] keys){
         List<Player> team = new ArrayList<>();
         double value = 0;
         int attempts = 0;
