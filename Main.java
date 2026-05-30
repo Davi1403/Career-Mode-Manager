@@ -17,13 +17,13 @@ public class Main {
         Javalin app = Javalin.create(config -> {
             config.plugins.enableCors(cors -> cors.add(it -> it.anyHost()));
             config.staticFiles.add("frontend/dist", io.javalin.http.staticfiles.Location.EXTERNAL);
-        }).start(8080);
+        }).start(7070);
 
         try {
             if (java.awt.Desktop.isDesktopSupported()) {
                 java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
                 if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
-                    desktop.browse(new java.net.URI("http://localhost:8080"));
+                    desktop.browse(new java.net.URI("http://localhost:7070"));
                 }
             }
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class Main {
             BackpackService bs = new BackpackService();
             Algorithms al = new Algorithms();
 
-            String[] files = { "GK.csv", "DEF.csv", "MID.csv", "ATK.csv" };
+            String[] files = { "GK_FC.csv", "DEF_FC.csv", "MID_FC.csv", "ATK_FC.csv" };
             String[] keys = { "GK", "DEF", "MID", "ATK" };
             Map<String, List<Player>> players = reader.readFiles(files, keys);
 
@@ -45,12 +45,12 @@ public class Main {
             int[] formation = { 1, 4, 4, 2}; // GK, DEF, MID, ATK
             Map<String, Double> posWeights = bs.genPosWeights(keys, pWeights);
 
-            System.out.println("SERVIDOR ONLINE! Acesse no navegador: http://localhost:8080");
+            System.out.println("SERVIDOR ONLINE! Acesse no navegador: http://localhost:7070");
 
             String metodo = ctx.queryParam("metodo");
             if (metodo == null) metodo = "hill"; // Se não vier nada, começa pelo Hill Climbing
 
-    // Lógica segura para o ORÇAMENTO
+            // Lógica segura para o ORÇAMENTO
             String budgetParam = ctx.queryParam("budget");
             double budget = (budgetParam != null && !budgetParam.isEmpty()) ? Double.parseDouble(budgetParam) : 100.0;
 

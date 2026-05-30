@@ -21,7 +21,7 @@ public class ReadCSV {
                 while ((line = br.readLine()) != null){
                     String[] data = line.split(",");
                     aux.add(new Player(data[1], data[11], Double.parseDouble(data[10]), Integer.parseInt(data[8]),
-                            data[6], data[7]));
+                            data[6], data[88], data[89]));
                 }
                 players.put(keys[i], aux);
             }
