@@ -2,10 +2,10 @@ package service;
 
 import model.Player;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class BackpackService {
+    Random rand = new Random();
 
     public int getIndexPosition(String pos){
         switch (pos) {
@@ -17,35 +17,100 @@ public class BackpackService {
         }
     }
 
-    // GENERATE FIRST SOLUTION
-    Random rand = new Random();
-    public void genFirstSolution(List<Player> players, int[] formation, int budget){
-        
-        int value = 0;
-        int draftedPlayers = 0;
-        int i=0;
-        
-        while (draftedPlayers < 11){
-            int sortedIndex = rand.nextInt(players.size());
-            Player sortedPlayer = players.get(sortedIndex);
-            
-            if (!sortedPlayer.isFlag()){
-                if(value + sortedPlayer.getValue() <= budget){
-                    int index = getIndexPosition(sortedPlayer.getPos());
-                    if(formation[index] != 0){
-                        sortedPlayer.setFlag(true);
-                        formation[index]--;
-                        draftedPlayers++;
-                    }
-                }
-            }
-            i++;
-            if(i>10000) break;
-        }
+
+    public Player draft(Map<String, List<Player>> players, String pos){
+        int sortedIndex = rand.nextInt(players.get(pos).size());
+        return players.get(pos).get(sortedIndex);
     }
 
-    //public List<Player> team = new ArrayList<>();
-    //while (team.size()) <= 11){
 
-    //}
+    public Map<String, Double> genPosWeights(String[] keys, double[] pWeights){
+        if (keys.length != pWeights.length) {
+            throw new IllegalArgumentException("Erro: A quantidade de chaves e pesos deve ser idêntica!");
+        }
+
+        Map<String,Double> posWeights = new HashMap<>();
+        for(int i = 0; i < keys.length; i++) {
+            posWeights.put(keys[i], pWeights[i]);
+        }
+
+        return posWeights;
+    }
+
+
+    // EVALUATE THE OVERALL
+    public double[] evaluate(List<Player> team, Map<String, Double> posWeights){
+
+        int minOverall = 999;
+        int maxOverall = -1;
+        double baseOverall = 0;
+        double teamWorkBonus = 0;
+        double totalValue = 0;
+        Map<String, Integer> nationCount = new HashMap<>();
+        Map<String, Integer> clubCount = new HashMap<>();
+
+        for (Player player:team){
+
+            // GET MIN AND MAX OVERALL
+            if(player.getOverall() > maxOverall) maxOverall = player.getOverall();
+            if(player.getOverall() < minOverall) minOverall = player.getOverall();
+
+            // COUNT NATIONALITY AND CLUB
+            nationCount.put(player.getNacionalidade(), nationCount.getOrDefault(player.getNacionalidade(),0) + 1);
+            clubCount.put(player.getClub(), clubCount.getOrDefault(player.getClub(),0) + 1);
+
+            // APPLY POSITION WEIGHT
+            double playerOverall = player.getOverall() * posWeights.get(player.getPos());
+
+            // SUM OVERALL AND VALUE
+            baseOverall += playerOverall;
+            totalValue += player.getValue();
+        }
+
+        // NATIONALITY BONUS COUNT
+        for(int i : nationCount.values()){
+            if(i > 1) teamWorkBonus += (i-1) * 2;
+        }
+
+        // CLUB BONUS COUNT
+        for(int i : clubCount.values()){
+            if(i > 1) teamWorkBonus += (i-1) * 3;
+        }
+
+        // APPLIES BONUS AND PENALTIES, RETURN TOTALOVERALL AND TOTALVALUE
+        return new double[] {(baseOverall + teamWorkBonus) - (maxOverall - minOverall), totalValue};
+    }
+
+
+    // GENERATE FIRST SOLUTION
+    public List<Player> genFirstSolution(Map<String, List<Player>> players, int[] formation, double budget, String[] keys){
+        List<Player> team = new ArrayList<>();
+        double value = 0;
+        int attempts = 0;
+
+        // DRAFT PLAYERS
+        for(int i = 0; i < formation.length; i++) {
+            int j=0;
+            while (j < formation[i]) {
+
+                Player draftedPlayer = draft(players, keys[i]);
+                if(!team.contains(draftedPlayer)){
+                    double aux = value + draftedPlayer.getValue();
+                    if (aux <= budget) {
+                        team.add(draftedPlayer);
+                        value = aux;
+                        j++;
+                        attempts = 0;
+                    }
+                }
+                attempts++;
+                if(attempts>4000){
+                    System.out.println("ERROR ON GENFIRSTSOLUTION");
+                    return team;
+                }
+            }
+        }
+        return team;
+    }
+
 }

@@ -1,0 +1,490 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('./assets/fundo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+
+    /* Centraliza a interface inteira no meio da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* O SEGREDO DA PROPORÇÃO PERFEITA */
+.app-container {
+    display: flex;
+    gap: 1.5%; /* Espaçamento relativo em porcentagem */
+
+    /* Tamanho: 85% da tela (deixa bastante fundo sobrando) */
+    width: 85vw;
+
+    /* Impede que a tela quebre se o usuário deixar a janela muito "fina" */
+    max-width: calc(85vh * (16 / 7));
+    aspect-ratio: 16 / 7; /* Trava a proporção idêntica a da sua imagem */
+}
+
+/* ================= LADO ESQUERDO (OS CAMPOS) ================= */
+.pitches-area {
+    /* Peso 2, porque guarda 2 campos do mesmo tamanho da sidebar */
+    flex: 2;
+    display: flex;
+    gap: 2%;
+}
+
+.pitch-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* Sombra envelopando a coluna inteira (cabeçalho + campo) */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.panel-header {
+    background-color: rgba(220, 220, 220, 0.85); /* Cinza claro com transparência */
+    text-align: center;
+    font-weight: 900;
+    padding: 3% 0; /* Padding crescendo junto com a tela */
+    font-size: min(1.1vw, 2vh); /* A fonte trava na mesma proporção da caixa */
+    color: #111;
+}
+
+.pitch-bg {
+    flex: 1;
+    background-image: url('./assets/campo.jpg');
+    background-size: 100% 100%; /* Estica o gramado para preencher a caixa sem distorcer */
+    background-position: center;
+    position: relative;
+}
+
+
+/* ================= LADO DIREITO (CONTROLES) ================= */
+/* Nova grelha para organizar os blocos de input em duas colunas */
+.inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px; /* Espaçamento compacto para priorizar a área de texto abaixo */
+}
+
+/* Otimização inteligente: se o orçamento estiver sozinho (Hill Climbing), ocupa a linha inteira */
+.inputs-grid .control-row:only-child {
+    grid-column: span 2;
+}
+
+/* Ajuste fino nos textos internos dos inputs emparelhados */
+.control-row span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+.sidebar {
+    /* Peso 1, garantindo que seja do mesmo tamanho de 1 campo lá da esquerda */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+}
+
+.dropdown-header {
+    background-color: rgba(220, 220, 220, 0.85);
+    font-weight: 900;
+    font-size: min(1.1vw, 2vh);
+    padding: 4%;
+    padding-left: 10%; /* Empurra o texto para dar espaço para a seta */
+    color: #111;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+
+    /* 1. Esconde a seta padrão da direita */
+    -webkit-appearance: none;
+    appearance: none;
+
+    /* 2. Desenha uma seta (em SVG) na esquerda */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23111'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 4% center; /* Fica a 4% da borda esquerda */
+    background-size: 1.5em; /* Tamanho proporcional à fonte */
+}
+
+.control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(220, 220, 220, 0.85);
+    padding: 3% 4%;
+    font-weight: 800;
+    font-size: min(0.9vw, 1.7vh);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35); /* Adicionando sombra */
+}
+
+.control-row input {
+    background-color: rgba(255, 255, 255, 0.5); /* Fundo do input levemente transparente */
+    padding: 2%;
+    text-align: right;
+    font-weight: bold;
+    font-family: inherit;
+    width: 45%;
+    font-size: min(0.9vw, 1.7vh);
+    border: none;
+    outline: none;
+}
+
+/* ================= BOTÕES LADO A LADO ================= */
+.button-group {
+    display: flex;
+    gap: 8px; /* Substituído para alinhar perfeitamente com a grelha de inputs */
+}
+
+.btn-simular {
+    flex: 1;
+    background-color: rgba(26, 71, 42, 0.9);
+    color: white;
+    padding: 4%;
+    font-size: min(0.9vw, 1.7vh);
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+    border: none;
+}
+
+.btn-simular:hover {
+    background-color: rgba(39, 107, 63, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.45);
+}
+
+.btn-otimizar {
+    background-color: rgba(184, 134, 11, 0.9); /* Dourado escuro */
+}
+
+.btn-otimizar:hover:not(:disabled) {
+    background-color: rgba(218, 165, 32, 1);
+}
+
+.btn-otimizar:disabled {
+    background-color: rgba(100, 100, 100, 0.6);
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ================= REESTRUTURAÇÃO DA CAIXA DE RESULTADOS ================= */
+.results-box {
+    flex: 1;
+    background-color: rgba(220, 220, 220, 0.55);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Removido para o cabeçalho fixar perfeitamente */
+    overflow: hidden;
+}
+
+/* Cabeçalho superior fixo dentro do histórico */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(200, 200, 200, 0.9);
+    padding: 3% 4%;
+    font-weight: 900;
+    font-size: min(0.8vw, 1.4vh);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* O Botão de Limpeza no Canto Superior */
+.btn-limpar {
+    background-color: rgba(160, 40, 40, 0.85);
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    font-size: min(0.7vw, 1.2vh);
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+    text-transform: uppercase;
+}
+
+.btn-limpar:hover {
+    background-color: rgba(190, 30, 30, 1);
+}
+
+/* Container interno onde os textos acumulam e rolam */
+.results-content {
+    flex: 1;
+    padding: 4%;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: min(0.8vw, 1.5vh);
+}
+
+/* Elementos do histórico individual */
+.historico-item {
+    margin-bottom: 12px;
+}
+
+.historico-divisor {
+    border: none;
+    border-top: 1px dashed rgba(0, 0, 0, 0.25);
+    margin: 12px 0 4px 0;
+}
+
+
+/* ================= DISTRIBUIÇÃO TÁTICA NO CAMPO ================= */
+.linhas-formacao {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+    padding: 5% 0;
+}
+
+.linha-tatica {
+    display: flex;
+    justify-content: center;
+    gap: 6%; /* Espaçamento entre os jogadores da mesma linha */
+    width: 100%;
+}
+
+/* ================= CARTA DO JOGADOR (ESTILO FUT) ================= */
+.jogador-card {
+    background-color: rgba(20, 20, 20, 0.85);
+    background-image: linear-gradient(135deg, rgba(30,30,30,0.9) 0%, rgba(10,10,10,0.9) 100%);
+    border: 1px solid #d4af37;
+    border-radius: 6px;
+
+    /* 1. Carta mais "gordinha" (mais larga) */
+    width: 19%;
+    aspect-ratio: 3 / 4;
+
+    /* 2. Mais padding no topo para o Overall não bater no teto */
+    padding: 4% 3% 0% 3%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.6);
+    color: white;
+
+    opacity: 0;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    overflow: hidden;
+}
+
+/* ================= TOPO DA CARTA (STATUS + FOTO) ================= */
+.card-top-half {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 65%;
+    align-items: flex-end;
+}
+
+/* Coluna da Esquerda (Garante que os status fiquem isolados no canto) */
+.card-info-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    margin-bottom: 5%;
+    margin-left: -4px;
+    gap: 3px;
+    z-index: 3; /* Sempre na frente de tudo */
+}
+
+.card-fut-overall {
+    font-size: min(1.4vw, 2.4vh);
+    font-weight: 900;
+    color: #d4af37;
+    line-height: 1;
+}
+
+/* Posição de volta pro seu lugar original */
+.card-fut-pos {
+    font-size: min(0.6vw, 1.1vh);
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 3px; /* Seu espaçamento para afastar da bandeira */
+}
+
+.card-fut-flag, .card-fut-club {
+    width: min(1.3vw, 2vh);
+    object-fit: contain;
+}
+
+/* Coluna da Direita (Onde a foto vai brilhar sem invadir os números) */
+.card-photo-right {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 1;
+}
+
+.card-fut-face {
+    width: 100%;
+    height: 95%;
+    object-fit: contain;
+    object-position: bottom right;
+    margin-right: 18px;
+
+    /* O seu zoom calibrado perfeitamente */
+    transform: scale(2.2);
+    transform-origin: bottom left;
+}
+
+/* ================= BASE DA CARTA (NOME + VALOR) ================= */
+.card-bottom-half {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    height: 30%;
+    width: 100%;
+    padding-top: 4%;
+    margin: 0;
+}
+
+.card-fut-name {
+    /* DIMINUÍDO para não explodir as laterais */
+    font-size: min(0.5vw, 1vh);
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    letter-spacing: 0px;
+}
+
+.card-fut-value {
+    font-size: min(0.5vw, 0.9vh);
+    font-weight: bold;
+    color: #a5d6a7;
+    margin-top: 3px;
+}
+
+/* Mantém a animação original */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Mantém a sua animação original intacta */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Mantém a sua animação original intacta */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px); /* Começa pequena e um pouco mais abaixo */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0); /* Termina no tamanho e posição normal */
+    }
+}
+
+/* ================= ALINHAMENTO IDÊNTICO AOS TÍTULOS DOS CAMPOS ================= */
+.metodo-row-container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: -6;
+
+    /* MÁGICA: Altura cravada e idêntica à dos títulos "Solução Final" */
+    height: 57px !important;
+}
+
+/* O Menu de Seleção */
+.metodo-row-container .dropdown-header {
+    flex: 1; /* Ocupa o resto do espaço horizontal */
+    height: 100% !important; /* Copia os 38px cravados acima */
+    margin: 0 !important;
+    padding: 0 55px !important;
+
+    font-size: min(0.85vw, 3vh) !important;
+    font-weight: 800;
+    box-sizing: border-box !important;
+
+    background-color: rgba(220, 220, 220, 0.85);
+    border: none;
+    cursor: pointer;
+}
+
+/* O Botão de Música */
+.metodo-row-container .btn-musica-quadrado {
+    /* MÁGICA 2: Substituímos o aspect-ratio por uma largura cravada igual à altura (38x38) */
+    width: 57px !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box !important;
+
+    background-color: rgba(220, 220, 220, 0.85);
+    color: #111;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease;
+}
+
+/* Estados do botão */
+.metodo-row-container .btn-musica-quadrado:hover {
+    background-color: rgba(200, 200, 200, 1);
+}
+.metodo-row-container .btn-musica-quadrado.ativo {
+    background-color: rgba(184, 134, 11, 0.9);
+    color: white;
+}
+.metodo-row-container .btn-musica-quadrado.ativo:hover {
+    background-color: rgba(218, 165, 32, 1);
+}
