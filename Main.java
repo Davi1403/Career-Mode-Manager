@@ -3,6 +3,7 @@ import model.Player;
 import service.Algorithms;
 import service.BackpackService;
 import service.GeneticService;
+import service.GeneticService.AGResults;
 import util.ReadCSV;
 
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class Main {
 
                 GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
 
+
                 String tpParam = ctx.queryParam("tp");
                 int tp = (tpParam != null && !tpParam.isEmpty()) ? Integer.parseInt(tpParam) : 50;
 
@@ -98,12 +100,20 @@ public class Main {
                 double tc = (tcParam != null && !tcParam.isEmpty()) ? Double.parseDouble(tcParam) : 0.8;
 
                 String tmParam = ctx.queryParam("tm");
-                double tm = (tmParam != null && !tmParam.isEmpty()) ? Double.parseDouble(tmParam) : 0.05;
+                double tm = (tmParam != null && !tmParam.isEmpty()) ? Double.parseDouble(tmParam) : 0.1;
 
                 String igParam = ctx.queryParam("ig");
-                int ig = (igParam != null && !igParam.isEmpty()) ? Integer.parseInt(igParam) : 10;
+                double ig = (igParam != null && !igParam.isEmpty()) ? Double.parseDouble(igParam)  : 0.1;
 
-                timeFinal = al.(players, budget, tp, ng, tc, tm, ig);
+                List<List<Player>> fistPopulation = gn.firstPopulation(tp);
+                double[] fits = gn.fitness(fistPopulation);
+                List<List<Player>> orderFistPopulation = gn.order(fistPopulation, fits);
+                List<Player> bestInitialSolution = orderFistPopulation.get(0);
+                timeInicial.clear();
+                timeInicial.addAll(bestInitialSolution);
+
+                AGResults results =  gn.genetic(tp, ng, tc, tm, ig, orderFistPopulation, fits);
+                timeFinal = results.finalSolution;
             }
 
             // 4. PREPARA A RESPOSTA E MANDA PRO REACT

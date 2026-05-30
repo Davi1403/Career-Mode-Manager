@@ -118,8 +118,8 @@ function App() {
     const [tp, setTp] = useState(50);
     const [ng, setNg] = useState(100);
     const [tc, setTc] = useState(0.8);
-    const [tm, setTm] = useState(0.05);
-    const [ig, setIg] = useState(10);
+    const [tm, setTm] = useState(0.1);
+    const [ig, setIg] = useState(0.1);
 
     const nomesMetodos = {
         hill: "Subida de Encosta",
