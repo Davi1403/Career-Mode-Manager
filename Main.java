@@ -2,6 +2,7 @@ import io.javalin.Javalin;
 import model.Player;
 import service.Algorithms;
 import service.BackpackService;
+import service.GeneticService;
 import util.ReadCSV;
 
 import java.util.ArrayList;
@@ -83,7 +84,10 @@ public class Main {
 
                 timeFinal = al.simulatedAnnealing(new ArrayList<>(timeInicial), teamInfo.clone(), players, posWeights, budget, tempInicial, tempFinal, reducao);
             }
-            /*else if ("genetico".equals(metodo)) {
+            else if ("genetico".equals(metodo)) {
+
+                GeneticService gn = new GeneticService(players, formation, budget, keys, posWeights);
+
                 String tpParam = ctx.queryParam("tp");
                 int tp = (tpParam != null && !tpParam.isEmpty()) ? Integer.parseInt(tpParam) : 50;
 
@@ -99,8 +103,8 @@ public class Main {
                 String igParam = ctx.queryParam("ig");
                 int ig = (igParam != null && !igParam.isEmpty()) ? Integer.parseInt(igParam) : 10;
 
-                timeFinal = al.algoritmoGenetico(players, budget, tp, ng, tc, tm, ig);
-            }*/
+                timeFinal = al.(players, budget, tp, ng, tc, tm, ig);
+            }
 
             // 4. PREPARA A RESPOSTA E MANDA PRO REACT
             Map<String, Object> resposta = Map.of(

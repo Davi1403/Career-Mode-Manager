@@ -9,7 +9,7 @@ import java.util.Map;
 public class GeneticService {
     private final Map<String, List<Player>> players;
     private final int[] formation;
-    private final int budget;
+    private final double budget;
     private final String[] keys;
     private final Map<String, Double> posWeights;
     private final int populationSize = 50; // TP
@@ -17,7 +17,7 @@ public class GeneticService {
 
     private final BackpackService backpack = new BackpackService();
 
-    public GeneticService(Map<String, List<Player>> players, int[] formation, int budget, String[] keys, Map<String, Double> posWeights){
+    public GeneticService(Map<String, List<Player>> players, int[] formation, double budget, String[] keys, Map<String, Double> posWeights){
         this.players = players;
         this. formation = formation;
         this.budget = budget;
