@@ -261,85 +261,161 @@ body {
     width: 100%;
 }
 
-/* ================= CARTA DO JOGADOR (NOVO LAYOUT) ================= */
+/* ================= CARTA DO JOGADOR (ESTILO FUT) ================= */
 .jogador-card {
     background-color: rgba(20, 20, 20, 0.85);
+    background-image: linear-gradient(135deg, rgba(30,30,30,0.9) 0%, rgba(10,10,10,0.9) 100%);
     border: 1px solid #d4af37;
-    border-radius: 4px;
-    width: 16%;
-    padding: 2%;
+    border-radius: 6px;
+
+    /* 1. Carta mais "gordinha" (mais larga) */
+    width: 19%;
+    aspect-ratio: 3 / 4;
+
+    /* 2. Mais padding no topo para o Overall não bater no teto */
+    padding: 4% 3% 0% 3%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Espalha as 3 linhas (topo, meio, base) perfeitamente */
     box-shadow: 0 4px 6px rgba(0,0,0,0.6);
     color: white;
 
     opacity: 0;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-/* O TOPO (OVERALL E POSIÇÃO) */
-.card-top-row {
-    display: flex;
-    justify-content: space-between; /* Um pra cada lado */
-    width: 100%;
-    font-weight: 900;
-    font-size: min(0.8vw, 1.4vh);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    padding-bottom: 3%;
-    margin-bottom: 5%;
-}
-
-.card-overall {
-    color: #d4af37;
-}
-
-.card-pos {
-    color: #fff;
-}
-
-/* O MEIO (NOME E VALOR) */
-.card-middle-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    flex: 1; /* Faz o meio crescer e empurrar a bandeira lá para o fundo */
-}
-
-.card-nome {
-    font-size: min(0.65vw, 1.1vh);
-    font-weight: 800;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 2%;
-    line-height: 1.1;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Permite até 2 linhas pro nome não quebrar a carta */
-    -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.card-valor {
-    font-size: min(0.55vw, 1vh);
+/* ================= TOPO DA CARTA (STATUS + FOTO) ================= */
+.card-top-half {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 65%;
+    align-items: flex-end;
+}
+
+/* Coluna da Esquerda (Garante que os status fiquem isolados no canto) */
+.card-info-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    margin-bottom: 5%;
+    margin-left: -4px;
+    gap: 3px;
+    z-index: 3; /* Sempre na frente de tudo */
+}
+
+.card-fut-overall {
+    font-size: min(1.4vw, 2.4vh);
+    font-weight: 900;
+    color: #d4af37;
+    line-height: 1;
+}
+
+/* Posição de volta pro seu lugar original */
+.card-fut-pos {
+    font-size: min(0.6vw, 1.1vh);
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 3px; /* Seu espaçamento para afastar da bandeira */
+}
+
+.card-fut-flag, .card-fut-club {
+    width: min(1.3vw, 2vh);
+    object-fit: contain;
+}
+
+/* Coluna da Direita (Onde a foto vai brilhar sem invadir os números) */
+.card-photo-right {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 1;
+}
+
+.card-fut-face {
+    width: 100%;
+    height: 95%;
+    object-fit: contain;
+    object-position: bottom right;
+    margin-right: 18px;
+
+    /* O seu zoom calibrado perfeitamente */
+    transform: scale(2.2);
+    transform-origin: bottom left;
+}
+
+/* ================= BASE DA CARTA (NOME + VALOR) ================= */
+.card-bottom-half {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-top: 1px solid rgba(212, 175, 55, 0.4);
+    height: 30%;
+    width: 130%;
+    padding-top: 4%;
+    margin: 0;
+}
+
+.card-fut-name {
+    /* DIMINUÍDO para não explodir as laterais */
+    font-size: min(0.5vw, 1vh);
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    letter-spacing: 0px;
+}
+
+.card-fut-value {
+    font-size: min(0.5vw, 0.9vh);
     font-weight: bold;
     color: #a5d6a7;
-    margin-bottom: 5%;
+    margin-top: 3px;
 }
 
-/* A BASE (BANDEIRA) */
-.card-bottom-row {
-    display: flex;
-    justify-content: center; /* Centraliza a bandeira */
-    width: 100%;
-    margin-top: auto;
+/* Mantém a animação original */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
-.card-flag {
-    width: 1.3vw;
-    border-radius: 1px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+/* Mantém a sua animação original intacta */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Mantém a sua animação original intacta */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 @keyframes popIn {

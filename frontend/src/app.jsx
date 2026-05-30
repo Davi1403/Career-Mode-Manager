@@ -1,38 +1,61 @@
 import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import trilhaSonora from './assets/musica.mp3'
+import noPlayerImg from './assets/no_player.webp';
+import noClubImg from './assets/no_club.webp';
 
 // ==========================================
-// 1. COMPONENTE: CARTA DO JOGADOR
+// 1. COMPONENTE: CARTA DO JOGADOR (ESTILO FUT)
 // ==========================================
 function JogadorCard({ jogador, index }) {
     if (!jogador) return null;
 
     const countryCode = (jogador.nacionalidade || 'br').toLowerCase();
+    const valorFormatado = jogador.value ? `€ ${Number(jogador.value).toFixed(2)} M` : '€ 0.00 M';
 
-    // Formata o valor matematicamente para ter sempre 2 casas decimais (Ex: 10.5 -> 10.50)
-    const valorFormatado = jogador.value
-        ? `€ ${Number(jogador.value).toFixed(2)} M`
-        : '€ 0.00 M';
+    const urlFoto = jogador.club || noClubImg;
+    const urlEscudo = jogador.photo || noPlayerImg;
 
     return (
         <div className="jogador-card" style={{ animationDelay: `${index * 0.1}s` }}>
 
-            {/* LINHA SUPERIOR: Overall (Esquerda) e Posição (Direita) */}
-            <div className="card-top-row">
-                <span className="card-overall">{jogador.overall || 80}</span>
-                <span className="card-pos">{jogador.pos}</span>
+            {/* ================= TOPO DA CARTA ================= */}
+            <div className="card-top-half">
+
+                {/* HUD ESQUERDA: Overall, Posição, Bandeira e Escudo */}
+                <div className="card-info-left">
+                    <span className="card-fut-overall">{jogador.overall || 80}</span>
+
+                    {/* VOLTOU PRA CÁ! */}
+                    <span className="card-fut-pos">{jogador.pos}</span>
+
+                    <img src={`https://flagcdn.com/w20/${countryCode}.png`} className="card-fut-flag" alt="" />
+                    <img
+                        src={urlEscudo}
+                        className="card-fut-club"
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        onError={(e) => { e.target.onerror = null; e.target.src = noClubImg; }}
+                    />
+                </div>
+
+                {/* FOTO DO JOGADOR */}
+                <div className="card-photo-right">
+                    <img
+                        src={urlFoto}
+                        className="card-fut-face"
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        onError={(e) => { e.target.onerror = null; e.target.src = noPlayerImg; }}
+                    />
+                </div>
+
             </div>
 
-            {/* LINHA DO MEIO: Nome e Valor */}
-            <div className="card-middle-row">
-                <div className="card-nome">{jogador.fullName || jogador.name || 'Jogador'}</div>
-                <div className="card-valor">{valorFormatado}</div>
-            </div>
-
-            {/* LINHA INFERIOR: Bandeira Centralizada */}
-            <div className="card-bottom-row">
-                <img src={`https://flagcdn.com/w20/${countryCode}.png`} className="card-flag" alt="Bandeira" />
+            {/* METADE INFERIOR: Nome e Valor */}
+            <div className="card-bottom-half">
+                <div className="card-fut-name">{jogador.fullName || jogador.name || 'Jogador'}</div>
+                <div className="card-fut-value">{valorFormatado}</div>
             </div>
 
         </div>
