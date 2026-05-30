@@ -137,7 +137,7 @@ public class Algorithms {
         while(currentTemp > finalTemp){
             List<Player> auxTeam = new ArrayList<>(team);
             // results = {overall, value, oldPlayerIndex, newPlayerIndex}
-            double[] results = neighbors(players, posWeights, auxTeam, teamInfo[1], budget, 1);
+            double[] results = neighbors(players, posWeights, auxTeam, teamInfo[1], budget, 20); // ESCOLHEMOS 20 PARA MELHORAR A SOLUCAO
             Player oldPlayer = team.get((int) results[2]);
             Player newPlayer = players.get(oldPlayer.getPos()).get((int) results[3]);
 

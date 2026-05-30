@@ -16,11 +16,11 @@ public class GeneticService {
     private final int budget;
     private final String[] keys;
     private final Map<String, Double> posWeights;
-    private final int populationSize = 50; // TP
-    public final int gerationNumber = 200; //NG
-    private final double growthRate = 0.8; //TC
-    private final double mutationRate = 0.1; //TM
-    public final double generationInterval = 0.1;  //IG
+    private int populationSize; // TP
+    private int gerationNumber; //NG
+    private double growthRate; //TC
+    private double mutationRate; //TM
+    private double generationInterval;  //IG
 
 
     private final BackpackService backpack = new BackpackService();
@@ -32,6 +32,7 @@ public class GeneticService {
         this.budget = budget;
         this.keys = keys;
         this.posWeights = posWeights;
+
 
 
     }
@@ -183,14 +184,20 @@ public class GeneticService {
 
 
 
-    public AGResults genetic(){
+    public AGResults genetic(int populationSize, int gerationNumber, double growthRate, double mutationRate, double generationInterval){
+        this.populationSize = populationSize; // TP
+        this.gerationNumber = gerationNumber; //NG
+        this.growthRate = growthRate; //TC
+        this.mutationRate = mutationRate; //TM
+        this.generationInterval = generationInterval;  //IG
+
         List<List<Player>> pop = firstPopulation(populationSize);
         double[] fits = fitness(pop);
         pop = order(pop, fits);
         List<Player> initialSolution = pop.getFirst();
 
 
-        for (int g=0 ; g<gerationNumber ; g++){
+        for (int g=0 ; g<this.gerationNumber ; g++){
             List<List<Player>> decendents = descendants(fits, pop);
             double[] fitsDecendents = new double[decendents.size()];
             fitsDecendents = fitness(decendents);
